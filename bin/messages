@@ -1,0 +1,295 @@
+#!/usr/bin/env python3
+"""
+Lattice Messages Bridge
+Read and send iMessages from the command line.
+Requires Full Disk Access for the calling terminal/app.
+
+Usage:
+  messages read <phone>              # Last 10 messages with this number
+  messages read <phone> --count 20   # Last 20 messages
+  messages send <phone> "text"       # Send a message
+  messages contacts                  # List recent conversations
+  messages inbox                     # Unread/recent incoming across all chats
+  messages inbox --since 30          # Incoming in last 30 minutes
+"""
+
+import sqlite3
+import subprocess
+import sys
+import os
+import json
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+
+DB_PATH = Path.home() / "Library" / "Messages" / "chat.db"
+APPLE_EPOCH = 978307200  # 2001-01-01 00:00:00 UTC
+
+
+def extract_attributed_text(blob: bytes) -> str:
+    """Extract readable text from NSAttributedString blob (Siri-sent messages)."""
+    if not blob:
+        return ""
+    import re
+    try:
+        decoded = blob.decode("utf-8", errors="replace")
+        # Text sits between the NSAttributedString header and the NSDictionary attributes
+        # Find all readable ASCII chunks >= 5 chars
+        chunks = re.findall(r'[\x20-\x7e]{5,}', decoded)
+        # Filter out ObjC class names and framework internals
+        skip = {'NSString', 'NSAttributed', 'streamtyped', 'NSMutable', 'NSDictionary',
+                'NSNumber', 'NSValue', 'NSObject', 'NSData', 'NSArray', 'NSKeyedArchiver',
+                '__kIM', 'bplist', 'X$version', 'Y$archiver', 'T$top', 'X$objects',
+                'DDScannerResult', 'NS.rangeval', 'NS.special', 'RelativeDayOfWeek',
+                'DayOfWeek', 'ApproxTime', 'NoResult', 'DateTime', 'U$null', 'RMSV$class',
+                'ZNS.objects', 'UHours', 'WNSArray', 'Wversion', 'Ydd-result'}
+        text_chunks = [c for c in chunks if not any(s in c for s in skip)
+                       and not re.match(r'^[A-Z$][a-z$]{0,2}$', c)  # skip 1-3 char class fragments
+                       and not re.match(r'^[\W\d]+$', c)]  # skip pure punctuation/numbers
+        # Stop at first chunk that looks like binary metadata (starts with special chars)
+        clean = []
+        for c in text_chunks:
+            if c.startswith(('$', '\\', '^')) or 'bplist' in c:
+                break
+            clean.append(c)
+        return " ".join(clean).strip()
+    except Exception:
+        return ""
+
+
+def normalize_phone(phone: str) -> str:
+    """Strip formatting, ensure +1 prefix for US numbers."""
+    digits = "".join(c for c in phone if c.isdigit())
+    if len(digits) == 10:
+        digits = "1" + digits
+    return "+" + digits
+
+
+def ts_to_local(apple_ns: int) -> str:
+    """Convert Apple nanosecond timestamp to local datetime string."""
+    if apple_ns is None or apple_ns == 0:
+        return "unknown"
+    unix_ts = apple_ns / 1_000_000_000 + APPLE_EPOCH
+    dt = datetime.fromtimestamp(unix_ts)
+    return dt.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_db():
+    """Open Messages database read-only."""
+    if not DB_PATH.exists():
+        print("Error: Messages database not found.", file=sys.stderr)
+        sys.exit(1)
+    try:
+        conn = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
+        conn.row_factory = sqlite3.Row
+        return conn
+    except sqlite3.OperationalError as e:
+        if "authorization denied" in str(e):
+            print(
+                "Error: Full Disk Access required.\n"
+                "System Settings → Privacy & Security → Full Disk Access\n"
+                "Add your terminal app (Terminal.app, iTerm, or Claude binary).",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        raise
+
+
+def read_messages(phone: str, count: int = 10):
+    """Read recent messages from a conversation."""
+    normalized = normalize_phone(phone)
+    db = get_db()
+    rows = db.execute(
+        """
+        SELECT
+            m.is_from_me,
+            m.text,
+            m.date as ts,
+            m.associated_message_type,
+            m.attributedBody
+        FROM message m
+        JOIN chat_message_join cmj ON m.ROWID = cmj.message_id
+        JOIN chat c ON cmj.chat_id = c.ROWID
+        WHERE c.chat_identifier = ?
+        ORDER BY m.date DESC
+        LIMIT ?
+        """,
+        (normalized, count),
+    ).fetchall()
+
+    if not rows:
+        print(f"No messages found for {normalized}")
+        return
+
+    # Print oldest first
+    for row in reversed(rows):
+        who = "Me" if row["is_from_me"] else "Them"
+        text = row["text"]
+        # Fallback: extract from attributedBody (Siri-sent messages store text only there)
+        if not text and row["attributedBody"]:
+            text = extract_attributed_text(row["attributedBody"])
+        text = text or "[attachment/reaction]"
+        time = ts_to_local(row["ts"])
+        # Skip reactions/tapbacks (associated_message_type > 0)
+        if row["associated_message_type"] and row["associated_message_type"] > 0:
+            continue
+        print(f"[{time}] {who}: {text}")
+
+
+def send_message(phone: str, text: str):
+    """Send an iMessage via AppleScript."""
+    normalized = normalize_phone(phone)
+    escaped = text.replace("\\", "\\\\").replace('"', '\\"')
+    script = f'''
+    tell application "Messages"
+        set targetService to 1st service whose service type = iMessage
+        set targetBuddy to buddy "{normalized}" of targetService
+        send "{escaped}" to targetBuddy
+    end tell
+    '''
+    result = subprocess.run(
+        ["osascript", "-e", script],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"Error sending: {result.stderr.strip()}", file=sys.stderr)
+        sys.exit(1)
+    print(f"Sent to {normalized}")
+
+
+def inbox(since_minutes: int = 60):
+    """Show recent incoming messages across all conversations, grouped by sender."""
+    db = get_db()
+    # Calculate the Apple nanosecond timestamp for 'since_minutes' ago
+    cutoff_unix = datetime.now().timestamp() - (since_minutes * 60)
+    cutoff_apple_ns = int((cutoff_unix - APPLE_EPOCH) * 1_000_000_000)
+
+    rows = db.execute(
+        """
+        SELECT
+            c.chat_identifier,
+            c.display_name,
+            m.text,
+            m.date as ts,
+            m.is_from_me,
+            m.associated_message_type,
+            m.attributedBody
+        FROM message m
+        JOIN chat_message_join cmj ON m.ROWID = cmj.message_id
+        JOIN chat c ON cmj.chat_id = c.ROWID
+        WHERE m.date > ?
+          AND m.is_from_me = 0
+          AND (m.associated_message_type IS NULL OR m.associated_message_type = 0)
+          AND (m.text IS NOT NULL AND m.text != '' OR m.attributedBody IS NOT NULL)
+        ORDER BY m.date DESC
+        """,
+        (cutoff_apple_ns,),
+    ).fetchall()
+
+    if not rows:
+        print(f"No incoming messages in the last {since_minutes} minutes.")
+        return
+
+    # Group by chat
+    chats = {}
+    for row in rows:
+        cid = row["chat_identifier"]
+        if cid not in chats:
+            chats[cid] = {
+                "name": row["display_name"] or cid,
+                "messages": [],
+            }
+        text = row["text"]
+        if not text and row["attributedBody"]:
+            text = extract_attributed_text(row["attributedBody"])
+        if not text:
+            continue
+        chats[cid]["messages"].append({
+            "text": text,
+            "time": ts_to_local(row["ts"]),
+        })
+
+    # Print grouped
+    for cid, chat in chats.items():
+        print(f"\n--- {chat['name']} ({cid}) ---")
+        # Show oldest first
+        for msg in reversed(chat["messages"]):
+            print(f"  [{msg['time']}] {msg['text']}")
+
+    print(f"\n{len(rows)} incoming message(s) from {len(chats)} conversation(s)")
+
+
+def list_contacts(count: int = 20):
+    """List recent conversations."""
+    db = get_db()
+    rows = db.execute(
+        """
+        SELECT
+            c.chat_identifier,
+            c.display_name,
+            MAX(m.date) as last_msg,
+            COUNT(m.ROWID) as msg_count
+        FROM chat c
+        JOIN chat_message_join cmj ON c.ROWID = cmj.chat_id
+        JOIN message m ON cmj.message_id = m.ROWID
+        GROUP BY c.ROWID
+        ORDER BY last_msg DESC
+        LIMIT ?
+        """,
+        (count,),
+    ).fetchall()
+
+    for row in rows:
+        name = row["display_name"] or row["chat_identifier"]
+        time = ts_to_local(row["last_msg"])
+        print(f"{name:<30} {row['msg_count']:>5} msgs  last: {time}")
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(__doc__)
+        sys.exit(0)
+
+    cmd = sys.argv[1]
+
+    if cmd == "read":
+        if len(sys.argv) < 3:
+            print("Usage: messages read <phone> [--count N]", file=sys.stderr)
+            sys.exit(1)
+        phone = sys.argv[2]
+        count = 10
+        if "--count" in sys.argv:
+            idx = sys.argv.index("--count")
+            count = int(sys.argv[idx + 1])
+        read_messages(phone, count)
+
+    elif cmd == "send":
+        if len(sys.argv) < 4:
+            print('Usage: messages send <phone> "message text"', file=sys.stderr)
+            sys.exit(1)
+        phone = sys.argv[2]
+        text = " ".join(sys.argv[3:])
+        send_message(phone, text)
+
+    elif cmd == "inbox":
+        since = 60
+        if "--since" in sys.argv:
+            idx = sys.argv.index("--since")
+            since = int(sys.argv[idx + 1])
+        inbox(since)
+
+    elif cmd == "contacts":
+        count = 20
+        if "--count" in sys.argv:
+            idx = sys.argv.index("--count")
+            count = int(sys.argv[idx + 1])
+        list_contacts(count)
+
+    else:
+        print(f"Unknown command: {cmd}", file=sys.stderr)
+        print(__doc__)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
