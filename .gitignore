@@ -16,3 +16,4 @@
 
 # Original (Self-Hosted bridge legacy ignore)
 config.sh
+.env*.local

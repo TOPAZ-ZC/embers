@@ -1,24 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <!-- rounded-square cream background (iOS-friendly) -->
-  <rect width="512" height="512" rx="112" fill="#fef3e4"/>
-  <!-- subtle radial warmth -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <radialGradient id="warmth" cx="50%" cy="60%" r="55%">
-      <stop offset="0%" stop-color="#ffe8c9" stop-opacity="1"/>
+      <stop offset="0%" stop-color="#ffe8c9"/>
       <stop offset="100%" stop-color="#fef3e4" stop-opacity="0"/>
     </radialGradient>
   </defs>
+  <rect width="512" height="512" rx="112" fill="#fef3e4"/>
   <rect width="512" height="512" rx="112" fill="url(#warmth)"/>
 
-  <!-- log / wood base (brand element) -->
-  <g transform="translate(256, 256) scale(12) translate(-12, -12)">
-    <path d="M9 17 L 15 17 L 14 22 L 10 22 Z"
-          fill="#a67256" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
-    <!-- flame (brand match — same path as the nav logo) -->
-    <path d="M12 2 C 10 5, 8 7, 8 11 C 8 15, 10 17, 12 17 C 14 17, 16 15, 16 12 C 16 10, 15 9, 14 8 C 14 11, 12 12, 12 12 C 12 10, 14 8, 12 2 Z"
-          fill="#ff6b35" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
-    <!-- inner hot-core -->
-    <path d="M12 6 C 10.8 8, 9.6 9.2, 9.6 11.6 C 9.6 14, 10.8 15.2, 12 15.2 C 13.2 15.2, 14.4 14, 14.4 12.2 C 14.4 10.8, 13.6 9.8, 12.8 9 C 12.8 10.8, 12 11.5, 12 11.5 C 12 9.8, 13.2 8.4, 12 6 Z"
-          fill="#e63946"/>
-  </g>
+  <!-- Full campfire mark, rendered in a 56-unit inner coordinate space -->
+  <!-- Content shifted up 4 units to vertically center bbox in the viewBox -->
+  <svg x="28" y="28" width="456" height="456" viewBox="0 0 56 56" preserveAspectRatio="xMidYMid meet">
+    <!-- ground shadow -->
+    <ellipse cx="28" cy="46.5" rx="11" ry="1.3" fill="#2b1810" opacity="0.13"/>
+
+    <!-- Crossed logs — translate y=40 -->
+    <g transform="translate(28, 40) scale(0.92)">
+      <g transform="rotate(25)">
+        <rect x="-12" y="-2.5" width="24" height="5" rx="2.5" fill="#a67256" stroke="#2b1810" stroke-width="1.3" stroke-linejoin="round"/>
+        <circle cx="-12" cy="0" r="2.5" fill="#a67256" stroke="#2b1810" stroke-width="1.3"/>
+        <circle cx="-12" cy="0" r="0.9" fill="none" stroke="#2b1810" stroke-width="0.5" opacity="0.45"/>
+        <circle cx="12" cy="0" r="2.5" fill="#a67256" stroke="#2b1810" stroke-width="1.3"/>
+        <circle cx="12" cy="0" r="0.9" fill="none" stroke="#2b1810" stroke-width="0.5" opacity="0.45"/>
+      </g>
+      <g transform="rotate(-25)">
+        <rect x="-12" y="-2.5" width="24" height="5" rx="2.5" fill="#a67256" stroke="#2b1810" stroke-width="1.3" stroke-linejoin="round"/>
+        <circle cx="-12" cy="0" r="2.5" fill="#a67256" stroke="#2b1810" stroke-width="1.3"/>
+        <circle cx="-12" cy="0" r="0.9" fill="none" stroke="#2b1810" stroke-width="0.5" opacity="0.45"/>
+        <circle cx="12" cy="0" r="2.5" fill="#a67256" stroke="#2b1810" stroke-width="1.3"/>
+        <circle cx="12" cy="0" r="0.9" fill="none" stroke="#2b1810" stroke-width="0.5" opacity="0.45"/>
+      </g>
+    </g>
+
+    <!-- Iter 14 flame — y=4 (small gap above logs to prevent dark stroke merger) -->
+    <svg x="12" y="4" width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet">
+      <path d="M12 4 C 11 6, 10 9, 9 12 C 8 14, 7.5 17, 7.5 19 C 7 24, 11 28.5, 16 28.5 C 21 28.5, 25 24, 25 19 C 25 16, 24 13, 22.5 10 C 21.5 7.5, 20 5.5, 19.5 4.5 C 19 6, 18.5 7, 18 7.5 C 17.5 8, 17 7.8, 16.5 7.5 C 16 7.2, 15.5 6.5, 15 5 C 14.5 3.5, 14 2.5, 13.5 2.5 C 13 2.5, 12.5 3, 12 4 Z" fill="#e63946" stroke="#2b1810" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M14.5 9 C 12.5 11, 11 14, 11 17.5 C 11 22.5, 13 25.5, 16 25.5 C 19 25.5, 21.5 23.5, 21.5 20 C 21.5 16.5, 20 14, 18.5 12.5 C 18 13.5, 17 13.5, 16 13 C 15.5 11.5, 15 10, 14.5 9 Z" fill="#ff6b35"/>
+      <path d="M15 17 C 13.5 18.5, 13 20.5, 13.5 22.5 C 14 24, 15 24.5, 16 24.5 C 17.5 24.5, 18.5 24, 18.5 22.5 C 19 20.5, 18 19, 16.5 18 C 16 17.5, 15.5 17.5, 15 17 Z" fill="#ffb627"/>
+      <ellipse cx="15.5" cy="22" rx="0.8" ry="1.3" fill="#fff5db" opacity="0.7"/>
+    </svg>
+  </svg>
 </svg>
