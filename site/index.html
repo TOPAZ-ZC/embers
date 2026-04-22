@@ -9,6 +9,14 @@
 <meta property="og:description" content="Your dad texts all day. Your top lead is going cold. The friend from the party is still waiting. Embers drafts replies in your voice — a different voice for every person — and sends them through iMessage. Coming Summer 2026." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://tryembers.com/" />
+<meta property="og:image" content="https://tryembers.com/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Embers — keep every thread warm. Coming Summer 2026." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Embers — keep every thread warm" />
+<meta name="twitter:description" content="Voice-matched reply drafter for every relationship. Coming Summer 2026 — join the waitlist." />
+<meta name="twitter:image" content="https://tryembers.com/og-image.png" />
 <link rel="canonical" href="https://tryembers.com/" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -904,6 +912,7 @@
           <textarea class="wl-textarea" id="wl-keep" name="keep_warm_with" maxlength="500" placeholder="my dad, a few leads, friends who send 47 texts before noon…"></textarea>
         </div>
         <input type="hidden" name="source" id="wl-source" value="hero" />
+        <input type="hidden" name="referred_by" id="wl-referred-by" value="" />
         <button type="submit" class="wl-submit" id="wl-submit-btn">Lock my founders pricing →</button>
         <p class="wl-fineprint">One email at launch · no spam · unsubscribe anytime · <a href="/privacy">privacy</a></p>
       </form>
@@ -912,6 +921,18 @@
       <span class="wl-thanks-flame">🔥</span>
       <h2 class="wl-thanks-title">You're in.</h2>
       <p class="wl-thanks-sub">Watch your email — we'll send your install link the moment Spark ships. Founders pricing locked.</p>
+      <div id="wl-refer-block" style="display:none; background:var(--cream); border:2.5px solid var(--night); border-radius:16px; padding:16px; margin:10px 0 16px;">
+        <p style="font-family:var(--font-display); font-style:italic; font-weight:600; font-size:15px; color:var(--ember-deep); margin:0 0 4px;">Move up the queue.</p>
+        <p style="font-size:13px; color:var(--night-soft); margin:0 0 12px; line-height:1.45;">Share your link — every friend who joins bumps you closer to the front.</p>
+        <div style="display:flex; gap:6px; background:var(--marshmallow); border:2px solid var(--night); border-radius:10px; padding:6px;">
+          <input id="wl-refer-url" type="text" readonly style="flex:1; border:0; background:transparent; font-family:var(--font-body); font-size:13px; padding:4px 8px; color:var(--night); outline:none;" />
+          <button type="button" id="wl-refer-copy" style="padding:6px 14px; border:0; border-radius:8px; background:var(--night); color:var(--marshmallow); font-family:var(--font-body); font-weight:700; font-size:12px; cursor:pointer; letter-spacing:0.04em;">COPY</button>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <a id="wl-refer-sms" target="_blank" rel="noopener" style="flex:1; text-align:center; padding:9px 10px; border:2px solid var(--night); border-radius:10px; background:var(--sunbeam); color:var(--night); font-weight:700; font-size:12.5px; text-decoration:none; letter-spacing:0.03em;">📱  Share via text</a>
+          <a id="wl-refer-x" target="_blank" rel="noopener" style="flex:1; text-align:center; padding:9px 10px; border:2px solid var(--night); border-radius:10px; background:var(--marshmallow); color:var(--night); font-weight:700; font-size:12.5px; text-decoration:none; letter-spacing:0.03em;">✕  Post on X</a>
+        </div>
+      </div>
       <button type="button" class="wl-submit" data-waitlist-close style="background:var(--night);">Close</button>
     </div>
   </div>
@@ -928,6 +949,19 @@
   const submitBtn = document.getElementById('wl-submit-btn');
   const sourceInput = document.getElementById('wl-source');
   const tierInput = document.getElementById('wl-tier');
+  const referredByInput = document.getElementById('wl-referred-by');
+
+  // Capture ?ref=XXXXXXXX from URL or sessionStorage — stash into hidden field
+  try {
+    const urlRef = new URLSearchParams(location.search).get('ref');
+    const stashed = sessionStorage.getItem('embers_ref');
+    if (urlRef && /^[A-Z2-9]{8}$/i.test(urlRef)) {
+      sessionStorage.setItem('embers_ref', urlRef.toUpperCase());
+      referredByInput.value = urlRef.toUpperCase();
+    } else if (stashed && /^[A-Z2-9]{8}$/.test(stashed)) {
+      referredByInput.value = stashed;
+    }
+  } catch (_) {}
 
   function openDialog(source, tier) {
     sourceInput.value = source || 'unknown';
@@ -994,7 +1028,32 @@
       }
       formPane.style.display = 'none';
       thanks.style.display = '';
-      if (window.plausible) window.plausible('Waitlist Signup', { props: { source: data.source, tier: data.tier_interest || 'undecided', hosting: data.hosting_preference || 'undecided' } });
+      // Show referral share widget if server returned a refCode
+      if (body && body.refCode) {
+        const block = document.getElementById('wl-refer-block');
+        const urlInput = document.getElementById('wl-refer-url');
+        const copyBtn = document.getElementById('wl-refer-copy');
+        const smsLink = document.getElementById('wl-refer-sms');
+        const xLink = document.getElementById('wl-refer-x');
+        const shareUrl = 'https://tryembers.com/?ref=' + body.refCode;
+        const shareText = "I just joined the Embers waitlist — voice-matched reply drafter, coming Summer 2026. Join me and lock founders pricing: " + shareUrl;
+        urlInput.value = shareUrl;
+        smsLink.href = 'sms:?&body=' + encodeURIComponent(shareText);
+        xLink.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText);
+        block.style.display = '';
+        copyBtn.onclick = async function() {
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            const orig = copyBtn.textContent;
+            copyBtn.textContent = '✓ COPIED';
+            setTimeout(function(){ copyBtn.textContent = orig; }, 1600);
+          } catch (_) {
+            urlInput.select();
+            document.execCommand('copy');
+          }
+        };
+      }
+      if (window.plausible) window.plausible('Waitlist Signup', { props: { source: data.source, tier: data.tier_interest || 'undecided', hosting: data.hosting_preference || 'undecided', referred: data.referred_by ? 'yes' : 'no' } });
     } catch (err) {
       errBox.textContent = 'Network error. Try again.';
       errBox.classList.add('show');
