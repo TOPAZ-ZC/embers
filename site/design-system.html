@@ -7,7 +7,7 @@
 <meta name="description" content="Embers campfire design system. Sunset palette, Fraunces display, chunky components, organic speech balloons, spark particles. Sister to index.html." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=DM+Sans:opsz,wght@9..40,400..700&family=Figtree:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Outfit:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700&family=Inter:wght@400;500;700&family=Instrument+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
@@ -273,105 +273,6 @@
     <div class="type-row"><div class="type-label">Body</div><div><div class="type-body">Your dad texts all day about food and family. You can't always reply in the moment — but you don't want the conversation to go cold.</div><div class="type-spec">Outfit · 16px · 400 · 1.55</div></div></div>
     <div class="type-row"><div class="type-label">Small</div><div><div class="type-small">14-day trial · no card · works on your Mac</div><div class="type-spec">Outfit · 14px · 400</div></div></div>
     <div class="type-row"><div class="type-label">Caption tag</div><div><div class="type-caption">Embers, in your voice (dad)</div><div class="type-spec">Fraunces italic · 13px · 600 · ember-deep · used around balloons</div></div></div>
-  </section>
-
-  <!-- FONT LAB -->
-  <section>
-    <span class="section-label">the body font lab</span>
-    <h2>Body font <em>bake-off</em>.</h2>
-    <p class="lede">Same sample text, nine contenders, judged side-by-side. <strong>DM Sans</strong> is the current default. <strong>Figtree</strong> is my top alternative — purpose-built for warm/friendly registers. Pick your winner.</p>
-    <style>
-      .font-lab { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
-      @media (max-width: 700px) { .font-lab { grid-template-columns: 1fr; } }
-      .font-card { background: var(--marshmallow); border: 3px solid var(--night); border-radius: var(--r-md); padding: var(--sp-4); box-shadow: var(--shadow-warm); position: relative; }
-      .font-card.current { background: var(--cream-hot); }
-      .font-card .font-badge { position: absolute; top: -12px; right: 16px; background: var(--ember-deep); color: var(--marshmallow); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.06em; transform: rotate(-2deg); }
-      .font-name { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 4px; line-height: 1.1; }
-      .font-meta { font-family: "SF Mono", ui-monospace, monospace; font-size: 11px; color: var(--night-soft); margin: 0 0 var(--sp-3); text-transform: uppercase; letter-spacing: 0.05em; }
-      .font-sample { font-size: 16px; line-height: 1.55; color: var(--night); margin: 0 0 10px; }
-      .font-sample strong { font-weight: 700; }
-      .font-small { font-size: 13px; color: var(--night-soft); margin: 0; }
-      .f-dmsans { font-family: 'DM Sans', sans-serif; }
-      .f-figtree { font-family: 'Figtree', sans-serif; }
-      .f-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
-      .f-bricolage { font-family: 'Bricolage Grotesque', sans-serif; }
-      .f-outfit { font-family: 'Outfit', sans-serif; }
-      .f-hanken { font-family: 'Hanken Grotesk', sans-serif; }
-      .f-manrope { font-family: 'Manrope', sans-serif; }
-      .f-inter { font-family: 'Inter', sans-serif; }
-      .f-instrument { font-family: 'Instrument Sans', sans-serif; }
-    </style>
-    <div class="font-lab">
-
-      <div class="font-card f-dmsans">
-        <span class="font-badge">PREVIOUS</span>
-        <p class="font-name">DM Sans</p>
-        <p class="font-meta">google · geometric warm · 400/500/700</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card f-figtree">
-        <span class="font-badge" style="background:var(--ember);">TOP PICK</span>
-        <p class="font-name">Figtree</p>
-        <p class="font-meta">google · erik kennedy · warm friendly</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card f-jakarta">
-        <p class="font-name">Plus Jakarta Sans</p>
-        <p class="font-meta">google · rounded modern · ultra-warm</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card f-bricolage">
-        <span class="font-badge" style="background:var(--sunbeam);color:var(--night);">WILDCARD</span>
-        <p class="font-name">Bricolage Grotesque</p>
-        <p class="font-meta">google · variable width · editorial wonk</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card current f-outfit">
-        <span class="font-badge">CURRENT</span>
-        <p class="font-name">Outfit</p>
-        <p class="font-meta">google · geometric warm · modern</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card f-hanken">
-        <p class="font-name">Hanken Grotesk</p>
-        <p class="font-meta">google · modern grotesk · workhorse</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card f-manrope">
-        <p class="font-name">Manrope</p>
-        <p class="font-meta">google · rounded sans · close to system</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card f-instrument">
-        <p class="font-name">Instrument Sans</p>
-        <p class="font-meta">google · editorial neutral · slight quirk</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-      <div class="font-card f-inter">
-        <p class="font-name">Inter</p>
-        <p class="font-meta">google · neutral workhorse · cool tone</p>
-        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
-        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
-      </div>
-
-    </div>
-    <p style="margin-top:var(--sp-4);font-size:14px;color:var(--night-soft);font-style:italic;">Pick one and I'll swap the `--font-body` token + Google Fonts import across <code>index.html</code> and <code>design-system.html</code>.</p>
   </section>
 
   <!-- COMPONENTS -->
