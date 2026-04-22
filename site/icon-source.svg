@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- rounded-square cream background (iOS-friendly) -->
+  <rect width="512" height="512" rx="112" fill="#fef3e4"/>
+  <!-- subtle radial warmth -->
+  <defs>
+    <radialGradient id="warmth" cx="50%" cy="60%" r="55%">
+      <stop offset="0%" stop-color="#ffe8c9" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#fef3e4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#warmth)"/>
+
+  <!-- log / wood base (brand element) -->
+  <g transform="translate(256, 256) scale(12) translate(-12, -12)">
+    <path d="M9 17 L 15 17 L 14 22 L 10 22 Z"
+          fill="#a67256" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- flame (brand match — same path as the nav logo) -->
+    <path d="M12 2 C 10 5, 8 7, 8 11 C 8 15, 10 17, 12 17 C 14 17, 16 15, 16 12 C 16 10, 15 9, 14 8 C 14 11, 12 12, 12 12 C 12 10, 14 8, 12 2 Z"
+          fill="#ff6b35" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- inner hot-core -->
+    <path d="M12 6 C 10.8 8, 9.6 9.2, 9.6 11.6 C 9.6 14, 10.8 15.2, 12 15.2 C 13.2 15.2, 14.4 14, 14.4 12.2 C 14.4 10.8, 13.6 9.8, 12.8 9 C 12.8 10.8, 12 11.5, 12 11.5 C 12 9.8, 13.2 8.4, 12 6 Z"
+          fill="#e63946"/>
+  </g>
+</svg>
