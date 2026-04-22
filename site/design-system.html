@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Embers — design system</title>
 <meta name="description" content="Embers campfire design system. Sunset palette, Fraunces display, chunky components, organic speech balloons, spark particles. Sister to index.html." />
+<meta property="og:title" content="Embers — design system" />
+<meta property="og:description" content="The Embers campfire design system — sunset palette, Fraunces display, chunky components, organic speech balloons." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tryembers.com/design-system" />
+<meta property="og:image" content="https://tryembers.com/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://tryembers.com/og-image.png" />
+<link rel="canonical" href="https://tryembers.com/design-system" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
@@ -169,6 +179,38 @@
   /* SVG FLAME LOGO spec */
   .flame-showcase { display: flex; gap: var(--sp-4); align-items: center; flex-wrap: wrap; background: var(--marshmallow); border: 3px solid var(--night); border-radius: var(--r-lg); padding: var(--sp-4); box-shadow: var(--shadow-warm); }
   /* drop-shadow removed — the campfire SVG has its own ground shadow built in */
+
+  html { scroll-behavior: smooth; }
+  body { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 20px 16px 64px; }
+    nav { flex-wrap: wrap; gap: 10px; padding-bottom: var(--sp-3); }
+    .logo { font-size: 20px; gap: 8px; }
+    .logo svg { width: 28px; height: 28px; }
+    h1 { font-size: 44px; line-height: 0.98; }
+    h2 { font-size: 28px; margin: var(--sp-5) 0 var(--sp-3); padding-top: var(--sp-4); }
+    h3 { font-size: 19px; }
+    p.lede { font-size: 16px; margin-bottom: var(--sp-3); }
+    section { margin-bottom: var(--sp-5); }
+    .type-row { grid-template-columns: 1fr; gap: 6px; padding: var(--sp-3) 0; }
+    .type-label { font-size: 12px; }
+    .type-h1 { font-size: 42px; line-height: 1; }
+    .type-h2 { font-size: 30px; }
+    .type-h3 { font-size: 20px; }
+    .type-ital { font-size: 24px; }
+    .tilt-demo { grid-template-columns: 1fr; }
+    .tilt-card.l, .tilt-card.r { transform: none; }
+    .tiers { grid-template-columns: repeat(2, 1fr); }
+    .btn { padding: 14px 22px; font-size: 15px; }
+    .ribbon-demo { padding: var(--sp-4) var(--sp-3); }
+    footer { flex-direction: column; gap: 8px; font-size: 13px; }
+  }
+  @media (max-width: 380px) {
+    .logo { font-size: 17px; }
+    h1 { font-size: 36px; }
+    h2 { font-size: 24px; }
+  }
 </style>
 </head>
 <body>

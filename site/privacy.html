@@ -28,12 +28,13 @@
     --font-body: 'Outfit', ui-rounded, -apple-system, sans-serif;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--cream); color: var(--night); font-family: var(--font-body); line-height: 1.65; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--cream); color: var(--night); font-family: var(--font-body); line-height: 1.65; -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   .wrap { max-width: 740px; margin: 0 auto; padding: 36px 28px 80px; }
-  nav { display: flex; justify-content: space-between; align-items: center; padding-bottom: 32px; }
+  nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 32px; }
   .logo { font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: 26px; text-decoration: none; color: var(--night); }
   .logo:hover { color: var(--ember-deep); }
-  .nav-back { font-size: 14px; font-weight: 600; color: var(--night-soft); text-decoration: none; }
+  .nav-back { font-size: 14px; font-weight: 600; color: var(--night-soft); text-decoration: none; white-space: nowrap; }
   .nav-back:hover { color: var(--ember-deep); }
   h1 { font-family: var(--font-display); font-variation-settings: 'SOFT' 60, 'WONK' 1; font-size: 48px; line-height: 1; letter-spacing: -0.03em; margin: 0 0 8px; }
   .updated { color: var(--night-soft); font-size: 14px; margin-bottom: 36px; }
@@ -41,10 +42,23 @@
   p, ul { font-size: 16px; color: var(--night); }
   ul { padding-left: 22px; }
   li { margin: 6px 0; }
-  a { color: var(--ember-deep); }
+  a { color: var(--ember-deep); word-wrap: break-word; overflow-wrap: anywhere; }
   .callout { background: var(--marshmallow); border: 2.5px solid var(--night); border-radius: 16px; padding: 18px 22px; margin: 24px 0; }
   footer { margin-top: 60px; padding-top: 24px; border-top: 2px dashed var(--night); font-size: 13px; color: var(--night-soft); display: flex; gap: 16px; flex-wrap: wrap; }
   footer a { color: var(--night-soft); text-decoration: underline; text-decoration-style: dotted; }
+  @media (max-width: 640px) {
+    .wrap { padding: 22px 18px 64px; }
+    nav { padding-bottom: 22px; }
+    .logo { font-size: 22px; }
+    .logo svg { width: 28px !important; height: 28px !important; }
+    .nav-back { font-size: 13px; }
+    h1 { font-size: 38px; line-height: 1.02; letter-spacing: -0.025em; }
+    h2 { font-size: 22px; margin: 28px 0 10px; }
+    p, ul, li { font-size: 15.5px; line-height: 1.6; }
+    .callout { padding: 16px 18px; border-radius: 14px; }
+    .callout strong { display: inline; }
+    footer { margin-top: 44px; gap: 10px; flex-direction: column; }
+  }
 </style>
 </head>
 <body>
