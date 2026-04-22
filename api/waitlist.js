@@ -9,8 +9,12 @@
 // insert AND read back the new row's ref_code without a SELECT policy on the
 // waitlist table.
 
+const { sendConfirmationEmail } = require('./_email');
+
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cziyronfdqznnqkpfrlh.supabase.co';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6aXlyb25mZHF6bm5xa3BmcmxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MzM1NDcsImV4cCI6MjA5MjQwOTU0N30.eTTMBzKQ2JbsZJ2ENae_3B8whm2doZTH1nRhstPQLKE';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const FROM_ADDRESS = process.env.EMBERS_FROM_ADDRESS || 'Embers <hello@tryembers.com>';
 
 const HOSTING_VALUES = new Set(['self_hosted', 'cloud', 'undecided']);
 const TIER_VALUES = new Set(['spark', 'ember', 'hearth', 'bonfire', 'forge', 'undecided']);
@@ -137,9 +141,33 @@ module.exports = async function handler(req, res) {
   let body = [];
   try { body = JSON.parse(text); } catch (_) {}
   const row = Array.isArray(body) && body[0] ? body[0] : {};
+  const refCode = row.ref_code || null;
+  const alreadyRegistered = !!row.already_registered;
+
+  // Fire-and-forget confirmation email for FIRST-TIME signups only.
+  // Non-blocking: email failure must not fail the signup. If RESEND_API_KEY
+  // is unset (local dev, or pre-domain-verification prod), sendConfirmationEmail
+  // returns ok:false silently — we just log and move on.
+  if (!alreadyRegistered && refCode && RESEND_API_KEY) {
+    sendConfirmationEmail({
+      email,
+      refCode,
+      apiKey: RESEND_API_KEY,
+      fromAddress: FROM_ADDRESS,
+    }).then((result) => {
+      if (!result.ok) {
+        console.error('[waitlist] email send failed', result.status, result.error);
+      } else {
+        console.log('[waitlist] email sent to', email, 'status', result.status);
+      }
+    }).catch((e) => {
+      console.error('[waitlist] email send threw', e && e.message);
+    });
+  }
+
   return json(res, 200, {
     success: true,
-    refCode: row.ref_code || null,
-    alreadyRegistered: !!row.already_registered,
+    refCode,
+    alreadyRegistered,
   });
 };
