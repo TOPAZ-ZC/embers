@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# dadbot uninstall — unload agent, optionally remove config
+# embers uninstall — unload agent, optionally remove config
 
 set -euo pipefail
 
-LAUNCH_AGENT="$HOME/Library/LaunchAgents/com.dadbot.listener.plist"
-CONFIG_DIR="$HOME/.dadbot"
+LAUNCH_AGENT="$HOME/Library/LaunchAgents/com.embers.listener.plist"
+CONFIG_DIR="$HOME/.embers"
 
-echo "stopping dadbot listener..."
+echo "stopping embers listener..."
 
 if [[ -f "$LAUNCH_AGENT" ]]; then
     /bin/launchctl unload "$LAUNCH_AGENT" 2>/dev/null || true

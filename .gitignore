@@ -1,5 +1,18 @@
-config.sh
-*.log
+# OS / editor
 .DS_Store
-__pycache__/
-*.pyc
+.vscode/
+.idea/
+
+# Local config (never commit secrets)
+.env
+.env.local
+.env.production
+
+# Backups (kept locally, not in repo)
+.backups/
+
+# Vercel
+.vercel
+
+# Original (Self-Hosted bridge legacy ignore)
+config.sh

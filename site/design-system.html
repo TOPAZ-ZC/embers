@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Embers — design system</title>
+<meta name="description" content="Embers campfire design system. Sunset palette, Fraunces display, chunky components, organic speech balloons, spark particles. Sister to index.html." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=DM+Sans:opsz,wght@9..40,400..700&family=Figtree:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Outfit:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700&family=Inter:wght@400;500;700&family=Instrument+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:       #fef3e4;
+    --cream-hot:   #ffe8c9;
+    --ember:       #ff6b35;
+    --ember-deep:  #e63946;
+    --sunbeam:     #ffb627;
+    --marshmallow: #fff5db;
+    --lavender:        #d9c6ee;
+    --night:       #2b1810;
+    --night-soft:  #6b4a35;
+    --log:         #a67256;
+    --shadow-warm: 0 12px 0 var(--night);
+
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Outfit', ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", system-ui, sans-serif;
+
+    --sp-2: 12px; --sp-3: 18px; --sp-4: 24px; --sp-5: 40px; --sp-6: 64px;
+    --r-md: 18px; --r-lg: 24px; --r-pill: 100px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--cream); color: var(--night); font-family: var(--font-body); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  nav { display: flex; align-items: center; justify-content: space-between; padding-bottom: var(--sp-5); }
+  .logo {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+    font-weight: 800; font-style: italic;
+    font-size: 26px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .logo svg { width: 26px; height: 26px; }
+
+  h1 {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 50, 'WONK' 1, 'opsz' 144;
+    font-size: 68px; font-weight: 700; letter-spacing: -0.03em; line-height: 0.95;
+    margin: 0 0 var(--sp-3);
+  }
+  h1 em { font-style: italic; color: var(--ember-deep); font-variation-settings: 'SOFT' 100, 'WONK' 1; }
+  h2 {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 40, 'WONK' 1, 'opsz' 144;
+    font-size: 38px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;
+    margin: var(--sp-6) 0 var(--sp-3);
+    padding-top: var(--sp-5);
+    border-top: 3px dashed var(--night);
+  }
+  h2 em { font-style: italic; color: var(--ember-deep); }
+  h3 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: var(--sp-3) 0 8px; letter-spacing: -0.01em; }
+  p.lede { color: var(--night-soft); font-size: 18px; max-width: 60ch; margin: 0 0 var(--sp-4); }
+
+  section { margin-bottom: var(--sp-6); }
+  code { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 13px; background: var(--cream-hot); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--log); }
+
+  /* swatches */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: var(--sp-3); }
+  .swatch { border: 3px solid var(--night); border-radius: var(--r-md); overflow: hidden; background: var(--marshmallow); box-shadow: var(--shadow-warm); }
+  .swatch-color { height: 100px; display: block; border-bottom: 3px solid var(--night); }
+  .swatch-meta { padding: var(--sp-2) var(--sp-3); }
+  .swatch-name { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0; }
+  .swatch-value { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 12px; color: var(--night-soft); margin: 2px 0 0; }
+  .swatch-use { font-size: 12px; color: var(--night-soft); margin: 4px 0 0; font-style: italic; }
+
+  /* type rows */
+  .type-row { display: grid; grid-template-columns: 160px 1fr; gap: var(--sp-4); padding: var(--sp-3) 0; border-bottom: 2px dashed rgba(43,24,16,0.2); align-items: baseline; }
+  .type-row:last-child { border-bottom: 0; }
+  .type-label { color: var(--night-soft); font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+  .type-spec { color: var(--night-soft); font-size: 12px; margin-top: 4px; font-family: "SF Mono", ui-monospace, Menlo, monospace; }
+  .type-h1 { font-family: var(--font-display); font-variation-settings: 'SOFT' 50, 'WONK' 1, 'opsz' 144; font-size: 64px; font-weight: 700; letter-spacing: -0.04em; line-height: 0.95; }
+  .type-h1 em { font-style: italic; color: var(--ember-deep); font-variation-settings: 'SOFT' 100, 'WONK' 1; }
+  .type-h2 { font-family: var(--font-display); font-variation-settings: 'SOFT' 40, 'WONK' 1, 'opsz' 144; font-size: 42px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .type-h3 { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -0.01em; }
+  .type-ital { font-family: var(--font-display); font-style: italic; font-variation-settings: 'SOFT' 100, 'WONK' 1; font-size: 28px; color: var(--ember-deep); }
+  .type-body { font-size: 16px; }
+  .type-small { font-size: 14px; }
+  .type-caption { font-family: var(--font-display); font-style: italic; font-size: 15px; color: var(--ember-deep); font-weight: 600; }
+
+  /* component demos */
+  .component-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+  @media (max-width: 700px) { .component-grid { grid-template-columns: 1fr; } }
+  .demo { background: var(--marshmallow); border: 3px solid var(--night); border-radius: var(--r-lg); padding: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-3); box-shadow: var(--shadow-warm); }
+  .demo-label { font-size: 12px; color: var(--night-soft); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; justify-content: center; padding: 18px 32px; font-family: var(--font-body); font-weight: 700; font-size: 17px; text-decoration: none; border: 0; cursor: pointer; border-radius: var(--r-pill); transition: transform 0.1s ease, box-shadow 0.1s ease; }
+  .btn-primary { background: var(--ember-deep); color: var(--marshmallow); box-shadow: var(--shadow-warm); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 0 var(--night); }
+  .btn-primary:active { transform: translateY(6px); box-shadow: 0 4px 0 var(--night); }
+  .btn-ghost { background: var(--marshmallow); color: var(--night); border: 2.5px solid var(--night); box-shadow: var(--shadow-warm); }
+  .btn-ghost:hover { transform: translateY(-2px); }
+  .btn-ghost:active { transform: translateY(6px); box-shadow: 0 4px 0 var(--night); }
+
+  /* ORGANIC BALLOONS */
+  .balloon-demo { padding: var(--sp-3); display: flex; flex-direction: column; gap: 10px; }
+  .bln { max-width: 78%; padding: 12px 16px; font-size: 15px; line-height: 1.4; border: 2.5px solid var(--night); }
+  .bln.them { background: var(--cream-hot); border-radius: 22px 22px 22px 6px; align-self: flex-start; box-shadow: 3px 3px 0 var(--night); }
+  .bln.me { background: var(--sunbeam); border-radius: 22px 22px 6px 22px; align-self: flex-end; box-shadow: 3px 3px 0 var(--night); font-weight: 500; }
+  .bln-tag { font-family: var(--font-display); font-style: italic; font-size: 13px; color: var(--ember-deep); font-weight: 600; text-align: center; }
+  .bln-tag::before { content: "· "; } .bln-tag::after { content: " ·"; }
+
+  /* RIBBON + BADGE */
+  .ribbon-demo { background: var(--ember); border: 3px solid var(--night); border-radius: var(--r-lg); padding: var(--sp-5) var(--sp-4); position: relative; color: var(--marshmallow); box-shadow: var(--shadow-warm); }
+  .ribbon { position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(-2deg); background: var(--night); color: var(--sunbeam); font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 12px; padding: 5px 14px; border-radius: var(--r-pill); letter-spacing: 0.04em; white-space: nowrap; }
+  .new-pill { display: inline-block; background: var(--ember-deep); color: var(--marshmallow); font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: var(--r-pill); letter-spacing: 0.08em; vertical-align: middle; transform: rotate(-3deg); }
+
+  /* TILT CARDS */
+  .tilt-demo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+  .tilt-card { background: var(--sunbeam); border: 3px solid var(--night); border-radius: var(--r-lg); padding: var(--sp-3); box-shadow: var(--shadow-warm); }
+  .tilt-card h4 { font-family: var(--font-display); margin: 0 0 4px; font-size: 18px; }
+  .tilt-card p { margin: 0; font-size: 13px; color: var(--night-soft); }
+  .tilt-card.l { transform: rotate(-1.5deg); background: var(--cream-hot); }
+  .tilt-card.r { transform: rotate(1.5deg); background: var(--lavender); }
+
+  /* SPARK PREVIEW */
+  .spark-box { height: 140px; background: var(--night); border-radius: var(--r-md); position: relative; overflow: hidden; border: 3px solid var(--night); }
+  .spark { position: absolute; width: 6px; height: 6px; background: var(--ember); border-radius: 50%; opacity: 0; animation: rise 6s linear infinite; box-shadow: 0 0 12px 2px rgba(255,107,53,0.7); }
+  .spark.s2 { background: var(--sunbeam); box-shadow: 0 0 10px 2px rgba(255,182,39,0.7); }
+  .spark.s3 { background: var(--ember-deep); width: 4px; height: 4px; }
+  @keyframes rise {
+    0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+    10%  { opacity: 1; }
+    50%  { transform: translate(20px, -80px) scale(1); opacity: 0.9; }
+    100% { transform: translate(-10px, -140px) scale(0.3); opacity: 0; }
+  }
+
+  /* SECTION LABEL */
+  .section-label { display: inline-block; background: var(--night); color: var(--marshmallow); font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 13px; padding: 5px 14px; border-radius: var(--r-pill); margin-bottom: var(--sp-2); letter-spacing: 0.04em; }
+
+  /* VOICE */
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+  @media (max-width: 700px) { .voice-grid { grid-template-columns: 1fr; } }
+  .voice-col { background: var(--marshmallow); border: 3px solid var(--night); border-radius: var(--r-md); padding: var(--sp-4); box-shadow: var(--shadow-warm); }
+  .voice-col h4 { font-family: var(--font-display); margin: 0 0 var(--sp-2); font-size: 22px; font-style: italic; }
+  .voice-col.do h4 { color: #4a7c1a; }
+  .voice-col.dont h4 { color: var(--ember-deep); }
+  .voice-col ul { margin: 0; padding-left: 20px; color: var(--night-soft); font-size: 15px; }
+  .voice-col ul li { padding: 5px 0; }
+
+  /* TIER FLAMES */
+  .tiers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  @media (max-width: 700px) { .tiers { grid-template-columns: repeat(2, 1fr); } }
+  .tier-chip { background: var(--marshmallow); border: 2.5px solid var(--night); border-radius: var(--r-md); padding: 12px 8px; text-align: center; box-shadow: 0 6px 0 var(--night); }
+  .tier-chip .flm { font-size: 22px; display: block; margin-bottom: 2px; }
+  .tier-chip .nm { font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 16px; color: var(--ember-deep); }
+  .tier-chip .pr { font-size: 13px; color: var(--night-soft); font-weight: 600; }
+
+  footer { padding: var(--sp-5) 0 var(--sp-3); color: var(--night-soft); font-size: 14px; border-top: 3px dashed var(--night); margin-top: var(--sp-6); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer a { color: var(--night-soft); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+
+  /* SVG FLAME LOGO spec */
+  .flame-showcase { display: flex; gap: var(--sp-4); align-items: center; flex-wrap: wrap; background: var(--marshmallow); border: 3px solid var(--night); border-radius: var(--r-lg); padding: var(--sp-4); box-shadow: var(--shadow-warm); }
+  .flame-showcase svg { filter: drop-shadow(0 4px 0 var(--night)); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2 C 10 5, 8 7, 8 11 C 8 15, 10 17, 12 17 C 14 17, 16 15, 16 12 C 16 10, 15 9, 14 8 C 14 11, 12 12, 12 12 C 12 10, 14 8, 12 2 Z" fill="#ff6b35" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M9 17 L 15 17 L 14 22 L 10 22 Z" fill="#a67256" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      Embers — design system
+    </div>
+    <div><a href="index.html" style="color:var(--night-soft);text-decoration:none;font-weight:600;">← back to landing</a></div>
+  </nav>
+
+  <h1>The <em>campfire</em>,<br/>codified.</h1>
+  <p class="lede">Every token in <code>index.html</code> lives here too. Change once, change everywhere. The brand is sunset + campfire + chunky + playful. No iMessage blue. No Apple-restrained minimalism. Warm paper, ember pops, Fraunces italics, drop-shadows you can feel.</p>
+
+  <!-- LOGO -->
+  <section>
+    <span class="section-label">the mark</span>
+    <h2>The flame.</h2>
+    <p class="lede">An inline SVG — not an emoji, not an image. Two-path: ember flame on a log base. Ships with a hard drop-shadow that matches the rest of the system.</p>
+    <div class="flame-showcase">
+      <svg viewBox="0 0 24 24" width="96" height="96" fill="none">
+        <path d="M12 2 C 10 5, 8 7, 8 11 C 8 15, 10 17, 12 17 C 14 17, 16 15, 16 12 C 16 10, 15 9, 14 8 C 14 11, 12 12, 12 12 C 12 10, 14 8, 12 2 Z" fill="#ff6b35" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M9 17 L 15 17 L 14 22 L 10 22 Z" fill="#a67256" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <svg viewBox="0 0 24 24" width="56" height="56" fill="none">
+        <path d="M12 2 C 10 5, 8 7, 8 11 C 8 15, 10 17, 12 17 C 14 17, 16 15, 16 12 C 16 10, 15 9, 14 8 C 14 11, 12 12, 12 12 C 12 10, 14 8, 12 2 Z" fill="#ff6b35" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M9 17 L 15 17 L 14 22 L 10 22 Z" fill="#a67256" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+        <path d="M12 2 C 10 5, 8 7, 8 11 C 8 15, 10 17, 12 17 C 14 17, 16 15, 16 12 C 16 10, 15 9, 14 8 C 14 11, 12 12, 12 12 C 12 10, 14 8, 12 2 Z" fill="#ff6b35" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M9 17 L 15 17 L 14 22 L 10 22 Z" fill="#a67256" stroke="#2b1810" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <div style="flex:1; min-width:200px;">
+        <p style="margin:0;font-size:15px;color:var(--night-soft);">Paired with the wordmark in <code>Fraunces</code> italic, SOFT 100, WONK 1. Minimum clear-space equals the flame's height. Use 🔥 emoji only in body copy, never as the mark.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLOR -->
+  <section>
+    <span class="section-label">the fire</span>
+    <h2>Color.</h2>
+    <p class="lede">Sunset-campfire. Cream paper as canvas, ember + ember-deep for heat, sunbeam yellow for warmth, lavender for life, warm black (<code>night</code>) for ink. No cool tones. No iMessage blue.</p>
+    <div class="swatches">
+      <div class="swatch"><span class="swatch-color" style="background:var(--cream)"></span><div class="swatch-meta"><p class="swatch-name">cream</p><p class="swatch-value">#fef3e4</p><p class="swatch-use">canvas — warmer than paper</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--cream-hot)"></span><div class="swatch-meta"><p class="swatch-name">cream-hot</p><p class="swatch-value">#ffe8c9</p><p class="swatch-use">"them" bubbles, soft cards</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--marshmallow)"></span><div class="swatch-meta"><p class="swatch-name">marshmallow</p><p class="swatch-value">#fff5db</p><p class="swatch-use">elevated surfaces, buttons</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--ember)"></span><div class="swatch-meta"><p class="swatch-name">ember</p><p class="swatch-value">#ff6b35</p><p class="swatch-use">flame, "best" tier card</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--ember-deep)"></span><div class="swatch-meta"><p class="swatch-name">ember-deep</p><p class="swatch-value">#e63946</p><p class="swatch-use">primary CTA, italic emphasis</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--sunbeam)"></span><div class="swatch-meta"><p class="swatch-name">sunbeam</p><p class="swatch-value">#ffb627</p><p class="swatch-use">"me" bubbles, warm tier cards</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--lavender)"></span><div class="swatch-meta"><p class="swatch-name">lavender</p><p class="swatch-value">#d9c6ee</p><p class="swatch-use">network wedge accent, "still glowing"</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--night)"></span><div class="swatch-meta"><p class="swatch-name">night</p><p class="swatch-value">#2b1810</p><p class="swatch-use">ink, borders, drop-shadow, quote block</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--night-soft)"></span><div class="swatch-meta"><p class="swatch-name">night-soft</p><p class="swatch-value">#6b4a35</p><p class="swatch-use">muted text, footer</p></div></div>
+      <div class="swatch"><span class="swatch-color" style="background:var(--log)"></span><div class="swatch-meta"><p class="swatch-name">log</p><p class="swatch-value">#a67256</p><p class="swatch-use">wood base of the flame mark</p></div></div>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section>
+    <span class="section-label">the voice (visual)</span>
+    <h2>Typography.</h2>
+    <p class="lede"><code>Fraunces</code> is the display face — a variable serif with <code>opsz</code>, <code>SOFT</code>, and <code>WONK</code> axes. Italics get <code>SOFT 100, WONK 1</code> for extra personality. Body is <code>Outfit</code> — warm geometric sans with character. No cold Inter-style neutrality.</p>
+    <div class="type-row"><div class="type-label">Hero h1</div><div><div class="type-h1">keep every <em>thread</em> warm.</div><div class="type-spec">Fraunces · 64–140px · SOFT 50 · WONK 1 · 700 · italic swash on em</div></div></div>
+    <div class="type-row"><div class="type-label">Section h2</div><div><div class="type-h2">bigger fire, more threads.</div><div class="type-spec">Fraunces · 42–72px · SOFT 40 · WONK 1 · 700</div></div></div>
+    <div class="type-row"><div class="type-label">Card h3</div><div><div class="type-h3">Per-thread voice</div><div class="type-spec">Fraunces · 22px · 700</div></div></div>
+    <div class="type-row"><div class="type-label">Caption / cite</div><div><div class="type-ital">the reason this exists</div><div class="type-spec">Fraunces italic · 13–28px · SOFT 100 · WONK 1 · ember-deep</div></div></div>
+    <div class="type-row"><div class="type-label">Body</div><div><div class="type-body">Your dad texts all day about food and family. You can't always reply in the moment — but you don't want the conversation to go cold.</div><div class="type-spec">Outfit · 16px · 400 · 1.55</div></div></div>
+    <div class="type-row"><div class="type-label">Small</div><div><div class="type-small">14-day trial · no card · works on your Mac</div><div class="type-spec">Outfit · 14px · 400</div></div></div>
+    <div class="type-row"><div class="type-label">Caption tag</div><div><div class="type-caption">Embers, in your voice (dad)</div><div class="type-spec">Fraunces italic · 13px · 600 · ember-deep · used around balloons</div></div></div>
+  </section>
+
+  <!-- FONT LAB -->
+  <section>
+    <span class="section-label">the body font lab</span>
+    <h2>Body font <em>bake-off</em>.</h2>
+    <p class="lede">Same sample text, nine contenders, judged side-by-side. <strong>DM Sans</strong> is the current default. <strong>Figtree</strong> is my top alternative — purpose-built for warm/friendly registers. Pick your winner.</p>
+    <style>
+      .font-lab { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+      @media (max-width: 700px) { .font-lab { grid-template-columns: 1fr; } }
+      .font-card { background: var(--marshmallow); border: 3px solid var(--night); border-radius: var(--r-md); padding: var(--sp-4); box-shadow: var(--shadow-warm); position: relative; }
+      .font-card.current { background: var(--cream-hot); }
+      .font-card .font-badge { position: absolute; top: -12px; right: 16px; background: var(--ember-deep); color: var(--marshmallow); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.06em; transform: rotate(-2deg); }
+      .font-name { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 4px; line-height: 1.1; }
+      .font-meta { font-family: "SF Mono", ui-monospace, monospace; font-size: 11px; color: var(--night-soft); margin: 0 0 var(--sp-3); text-transform: uppercase; letter-spacing: 0.05em; }
+      .font-sample { font-size: 16px; line-height: 1.55; color: var(--night); margin: 0 0 10px; }
+      .font-sample strong { font-weight: 700; }
+      .font-small { font-size: 13px; color: var(--night-soft); margin: 0; }
+      .f-dmsans { font-family: 'DM Sans', sans-serif; }
+      .f-figtree { font-family: 'Figtree', sans-serif; }
+      .f-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+      .f-bricolage { font-family: 'Bricolage Grotesque', sans-serif; }
+      .f-outfit { font-family: 'Outfit', sans-serif; }
+      .f-hanken { font-family: 'Hanken Grotesk', sans-serif; }
+      .f-manrope { font-family: 'Manrope', sans-serif; }
+      .f-inter { font-family: 'Inter', sans-serif; }
+      .f-instrument { font-family: 'Instrument Sans', sans-serif; }
+    </style>
+    <div class="font-lab">
+
+      <div class="font-card f-dmsans">
+        <span class="font-badge">PREVIOUS</span>
+        <p class="font-name">DM Sans</p>
+        <p class="font-meta">google · geometric warm · 400/500/700</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card f-figtree">
+        <span class="font-badge" style="background:var(--ember);">TOP PICK</span>
+        <p class="font-name">Figtree</p>
+        <p class="font-meta">google · erik kennedy · warm friendly</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card f-jakarta">
+        <p class="font-name">Plus Jakarta Sans</p>
+        <p class="font-meta">google · rounded modern · ultra-warm</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card f-bricolage">
+        <span class="font-badge" style="background:var(--sunbeam);color:var(--night);">WILDCARD</span>
+        <p class="font-name">Bricolage Grotesque</p>
+        <p class="font-meta">google · variable width · editorial wonk</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card current f-outfit">
+        <span class="font-badge">CURRENT</span>
+        <p class="font-name">Outfit</p>
+        <p class="font-meta">google · geometric warm · modern</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card f-hanken">
+        <p class="font-name">Hanken Grotesk</p>
+        <p class="font-meta">google · modern grotesk · workhorse</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card f-manrope">
+        <p class="font-name">Manrope</p>
+        <p class="font-meta">google · rounded sans · close to system</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card f-instrument">
+        <p class="font-name">Instrument Sans</p>
+        <p class="font-meta">google · editorial neutral · slight quirk</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+      <div class="font-card f-inter">
+        <p class="font-name">Inter</p>
+        <p class="font-meta">google · neutral workhorse · cool tone</p>
+        <p class="font-sample">Your dad texts all day about food and family. <strong>Embers drafts replies in your voice</strong> and sends them through iMessage.</p>
+        <p class="font-small">14-day trial · founders pricing locked · Coming Summer 2026</p>
+      </div>
+
+    </div>
+    <p style="margin-top:var(--sp-4);font-size:14px;color:var(--night-soft);font-style:italic;">Pick one and I'll swap the `--font-body` token + Google Fonts import across <code>index.html</code> and <code>design-system.html</code>.</p>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section>
+    <span class="section-label">the pieces</span>
+    <h2>Components.</h2>
+    <p class="lede">Chunky neo-brutalist — thick borders, hard drop-shadows, buttons that press down on click. Not iMessage-polite. Not emoji-flat. Tactile and loud.</p>
+
+    <div class="component-grid">
+
+      <div class="demo">
+        <div class="demo-label">Buttons</div>
+        <a class="btn btn-primary">light a fire — $9.99/mo</a>
+        <a class="btn btn-ghost">see it work ↓</a>
+        <p style="margin:0;font-size:13px;color:var(--night-soft);"><strong>Hover:</strong> lifts 2px. <strong>Active:</strong> presses down 6px into shadow. Shadow is solid night — not blur.</p>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Speech balloons (not iMessage)</div>
+        <div class="balloon-demo">
+          <div class="bln them">made the brisket this weekend 🔥</div>
+          <div class="bln-tag">Embers, in your voice (dad)</div>
+          <div class="bln me">ha, that's a win. low and slow?</div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Ribbon + new-pill</div>
+        <div class="ribbon-demo">
+          <span class="ribbon">MOST POPULAR</span>
+          <p style="margin:0;">Ember tier card. Ribbon sits rotated -2° at top-center, night pill with sunbeam text.</p>
+        </div>
+        <span class="new-pill">NEW</span>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Tilt cards — asymmetric gallery</div>
+        <div class="tilt-demo">
+          <div class="tilt-card l"><h4>Family</h4><p>The ones you want warm forever.</p></div>
+          <div class="tilt-card r"><h4>Leads</h4><p>Every prevented lead-death = real money.</p></div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Tier flame-ladder</div>
+        <div class="tiers">
+          <div class="tier-chip"><span class="flm">🔥</span><div class="nm">Spark</div><div class="pr">$9.99</div></div>
+          <div class="tier-chip" style="background:var(--ember);color:var(--marshmallow);"><span class="flm">🔥🔥</span><div class="nm" style="color:var(--marshmallow)">Ember</div><div class="pr" style="color:var(--marshmallow)">$19.99</div></div>
+          <div class="tier-chip"><span class="flm">🔥🔥🔥</span><div class="nm">Hearth</div><div class="pr">$39.99</div></div>
+          <div class="tier-chip"><span class="flm">🔥🔥🔥🔥</span><div class="nm">Bonfire</div><div class="pr">$99</div></div>
+          <div class="tier-chip"><span class="flm">🏭</span><div class="nm">Forge</div><div class="pr">$59/seat</div></div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Floating sparks — ambient motion</div>
+        <div class="spark-box">
+          <span class="spark"    style="left:15%; bottom:5%; animation-delay:0s;"></span>
+          <span class="spark s2" style="left:35%; bottom:10%; animation-delay:0.8s;"></span>
+          <span class="spark"    style="left:55%; bottom:0%; animation-delay:1.6s;"></span>
+          <span class="spark s3" style="left:75%; bottom:8%; animation-delay:2.4s;"></span>
+          <span class="spark s2" style="left:90%; bottom:3%; animation-delay:3.2s;"></span>
+        </div>
+        <p style="margin:0;font-size:13px;color:var(--night-soft);">6 keyframes, 8s cycle, staggered delays. Respect <code>prefers-reduced-motion</code> at implementation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOICE -->
+  <section>
+    <span class="section-label">the voice (copy)</span>
+    <h2>How it <em>talks</em>.</h2>
+    <p class="lede">Warm. Direct. Specific over generic. Matches the founder's texting voice — which is the product. No AI-PR language. No consultant mush.</p>
+    <div class="voice-grid">
+      <div class="voice-col do">
+        <h4>Do</h4>
+        <ul>
+          <li>Start headings with verbs or specific claims</li>
+          <li>Use second person: "your dad," "your top lead"</li>
+          <li>Lead with concrete emotional specifics — brisket, food, family, lead going cold</li>
+          <li>Acknowledge the weird thing head-on</li>
+          <li>Short paragraphs. One or two sentences. Then break.</li>
+          <li>Fraunces italic on the one word that carries the emotion</li>
+        </ul>
+      </div>
+      <div class="voice-col dont">
+        <h4>Don't</h4>
+        <ul>
+          <li>No "revolutionary," "seamless," "AI-powered," "next-generation"</li>
+          <li>No iMessage blue. Ever.</li>
+          <li>No stock photos of smiling families</li>
+          <li>No hedging — "sort of" and "kind of" die</li>
+          <li>No multi-paragraph explanations. Cut harder.</li>
+          <li>No 🔥 emoji in the logo slot — use the SVG</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCESSIBILITY -->
+  <section>
+    <span class="section-label">the legibility</span>
+    <h2>Accessibility.</h2>
+    <p class="lede">WCAG AA across the palette. Chunky borders help low-vision and motion-sensitive users alike. Native HTML, no ARIA gymnastics.</p>
+    <div class="component-grid">
+      <div class="demo">
+        <div class="demo-label">Contrast ratios</div>
+        <style>
+          .tok { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 8px; font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 700; border: 2px solid var(--night); box-shadow: 2px 2px 0 var(--night); }
+          .tok-night       { background: var(--night);       color: var(--marshmallow); }
+          .tok-night-soft  { background: var(--night-soft);  color: var(--marshmallow); }
+          .tok-cream       { background: var(--cream);       color: var(--night); }
+          .tok-marshmallow { background: var(--marshmallow); color: var(--night); }
+          .tok-ember-deep  { background: var(--ember-deep);  color: var(--marshmallow); }
+        </style>
+        <p style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;"><span class="tok tok-night">night</span> on <span class="tok tok-cream">cream</span> : <strong>13.1:1</strong> (AAA)</p>
+        <p style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;"><span class="tok tok-night-soft">night-soft</span> on <span class="tok tok-cream">cream</span> : <strong>5.4:1</strong> (AA)</p>
+        <p style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;"><span class="tok tok-marshmallow">marshmallow</span> on <span class="tok tok-ember-deep">ember-deep</span> : <strong>4.9:1</strong> (AA)</p>
+        <p style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;"><span class="tok tok-marshmallow">marshmallow</span> on <span class="tok tok-night">night</span> : <strong>16.8:1</strong> (AAA)</p>
+      </div>
+      <div class="demo">
+        <div class="demo-label">Motion + focus</div>
+        <p>Sparks animation respects <code>prefers-reduced-motion</code> — disable when requested.</p>
+        <p>Focus: 3px dashed outline in <code>ember-deep</code>, 4px offset.</p>
+        <p>All interactives keyboard-reachable. No div-as-button. Native <code>&lt;details&gt;</code> for FAQ.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div style="font-family:var(--font-display);font-style:italic;font-size:16px;color:var(--night);">🔥 Embers — design system v2.</div>
+    <div>
+      <a href="index.html">back to landing</a> ·
+      <a href="mailto:hello@embers.app">hello@embers.app</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

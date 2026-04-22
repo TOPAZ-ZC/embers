@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# dadbot install — interactive onboarding + LaunchAgent setup
+# embers install — interactive onboarding + LaunchAgent setup
 # Run once: ./install.sh
 
 set -euo pipefail
 
 REPO_DIR="$(cd "$(/usr/bin/dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_DIR="$HOME/.dadbot"
+CONFIG_DIR="$HOME/.embers"
 CONFIG_FILE="$CONFIG_DIR/config.sh"
-LAUNCH_AGENT="$HOME/Library/LaunchAgents/com.dadbot.listener.plist"
+LAUNCH_AGENT="$HOME/Library/LaunchAgents/com.embers.listener.plist"
 
 bold() { printf "\033[1m%s\033[0m\n" "$1"; }
 dim()  { printf "\033[2m%s\033[0m\n" "$1"; }
@@ -37,7 +37,7 @@ normalize_phone() {
     echo "+$digits"
 }
 
-bold "dadbot installer"
+bold "embers installer"
 echo "this sets up an auto-reply listener for one person in your iMessage thread."
 echo "the listener reads your conversation, drafts replies in your voice via Claude,"
 echo "and sends them through iMessage every few minutes."
@@ -103,7 +103,7 @@ while [[ -z "${SENDER_NAME// }" ]]; do
     SENDER_NAME=$(prompt "your first name")
 done
 
-RECIPIENT_NAME=$(prompt "their first name (the person dadbot replies to)")
+RECIPIENT_NAME=$(prompt "their first name (the person embers replies to)")
 while [[ -z "${RECIPIENT_NAME// }" ]]; do
     RECIPIENT_NAME=$(prompt "their first name")
 done
@@ -125,7 +125,7 @@ echo "example: 'warm, casual, short, no emojis, lots of questions about her day'
 TONE_GUIDANCE=$(prompt "tone" "Be warm, casual, short (1-3 sentences). Match their energy. No emojis.")
 
 echo ""
-CHECK_MINUTES=$(prompt "how often should dadbot check for new messages? (minutes)" "15")
+CHECK_MINUTES=$(prompt "how often should embers check for new messages? (minutes)" "15")
 CHECK_INTERVAL=$(( CHECK_MINUTES * 60 ))
 
 # --- write config ---
@@ -133,7 +133,7 @@ CHECK_INTERVAL=$(( CHECK_MINUTES * 60 ))
 /bin/chmod 700 "$CONFIG_DIR"
 
 /bin/cat > "$CONFIG_FILE" << CONFIG
-# dadbot config — generated $(/bin/date '+%Y-%m-%d %H:%M:%S')
+# embers config — generated $(/bin/date '+%Y-%m-%d %H:%M:%S')
 # edit this file anytime to change behavior
 
 SENDER_NAME="$SENDER_NAME"
@@ -156,7 +156,7 @@ grn "✓ config written: $CONFIG_FILE"
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.dadbot.listener</string>
+    <string>com.embers.listener</string>
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
@@ -192,7 +192,7 @@ grn "✓ listener started"
 echo ""
 bold "all set."
 echo ""
-echo "dadbot is now running and will check the thread every $CHECK_MINUTES minutes."
+echo "embers is now running and will check the thread every $CHECK_MINUTES minutes."
 echo "log:    $CONFIG_DIR/listener.log"
 echo "config: $CONFIG_FILE  (edit anytime, then: ./install.sh to reload)"
 echo ""
@@ -200,4 +200,4 @@ echo "to stop:    ./uninstall.sh"
 echo "to pause:   launchctl unload $LAUNCH_AGENT"
 echo "to resume:  launchctl load $LAUNCH_AGENT"
 echo ""
-dim "first check runs immediately. if $RECIPIENT_NAME's last message is newer than your last reply, dadbot will draft + send one now."
+dim "first check runs immediately. if $RECIPIENT_NAME's last message is newer than your last reply, embers will draft + send one now."
