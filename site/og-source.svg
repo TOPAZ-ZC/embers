@@ -49,20 +49,12 @@
   </svg>
 
   <!-- Wordmark + tagline -->
-  <text x="600" y="270" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="800" font-size="140" fill="#2b1810" letter-spacing="-3">Embers</text>
-  <text x="600" y="350" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="44" fill="#2b1810" letter-spacing="-1">keep every thread <tspan font-style="italic" fill="#e63946">warm</tspan>.</text>
+  <text x="600" y="264" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="800" font-size="148" fill="#2b1810" letter-spacing="-3">Embers</text>
+  <text x="600" y="344" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="46" fill="#2b1810" letter-spacing="-1">keep every thread <tspan font-style="italic" fill="#e63946">warm</tspan>.</text>
 
-  <!-- Sub: voice-matched messaging -->
-  <text x="600" y="430" font-family="Outfit, sans-serif" font-weight="500" font-size="26" fill="#6b4a35">Voice-matched reply drafter for every relationship.</text>
-  <text x="600" y="465" font-family="Outfit, sans-serif" font-weight="500" font-size="26" fill="#6b4a35">A different voice for every person. Runs on your Mac.</text>
-
-  <!-- CTA pill -->
-  <g transform="translate(600, 525)">
-    <rect x="0" y="0" width="430" height="62" rx="31" fill="#e63946" stroke="#2b1810" stroke-width="3"/>
-    <rect x="0" y="0" width="430" height="62" rx="31" fill="none" stroke="#2b1810" stroke-width="3" transform="translate(0 8)" opacity="0.001"/>
-    <text x="215" y="40" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="700" font-size="22" fill="#fff5db">🔥  Coming Summer 2026 · join the waitlist</text>
-  </g>
+  <!-- Value line -->
+  <text x="600" y="426" font-family="Outfit, sans-serif" font-weight="600" font-size="32" fill="#5b4030">A different voice for every person.</text>
 
   <!-- domain footer -->
-  <text x="600" y="615" font-family="Outfit, sans-serif" font-weight="600" font-size="18" fill="#6b4a35">tryembers.com</text>
+  <text x="600" y="474" font-family="Outfit, sans-serif" font-weight="600" font-size="24" fill="#6b4a35">tryembers.com</text>
 </svg>
