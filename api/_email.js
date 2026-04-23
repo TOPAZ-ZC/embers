@@ -219,7 +219,7 @@ function buildConfirmationEmail({ email, refCode }) {
   return { subject, html, text };
 }
 
-// Non-blocking send to Resend. Returns { ok, status, error? }.
+// Best-effort send to Resend. Returns { ok, status, error? }.
 // Never throws — the caller (waitlist.js) must not fail the signup if email fails.
 async function sendConfirmationEmail({ email, refCode, apiKey, fromAddress }) {
   if (!apiKey) {
@@ -227,6 +227,14 @@ async function sendConfirmationEmail({ email, refCode, apiKey, fromAddress }) {
   }
   const from = fromAddress || `Embers <${REPLY_TO}>`;
   const { subject, html, text } = buildConfirmationEmail({ email, refCode });
+  const timeoutMs = Number.parseInt(process.env.EMBERS_EMAIL_TIMEOUT_MS || '5000', 10);
+  const signal =
+    Number.isFinite(timeoutMs) &&
+    timeoutMs > 0 &&
+    typeof AbortSignal !== 'undefined' &&
+    typeof AbortSignal.timeout === 'function'
+      ? AbortSignal.timeout(timeoutMs)
+      : undefined;
 
   try {
     const resp = await fetch('https://api.resend.com/emails', {
@@ -235,6 +243,7 @@ async function sendConfirmationEmail({ email, refCode, apiKey, fromAddress }) {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
+      ...(signal ? { signal } : {}),
       body: JSON.stringify({
         from,
         to: [email],
@@ -250,7 +259,11 @@ async function sendConfirmationEmail({ email, refCode, apiKey, fromAddress }) {
     }
     return { ok: true, status: resp.status };
   } catch (e) {
-    return { ok: false, status: 0, error: (e && e.message) || 'network_error' };
+    const errorMessage =
+      e && e.name === 'TimeoutError'
+        ? `timeout after ${timeoutMs}ms`
+        : (e && e.message) || 'network_error';
+    return { ok: false, status: 0, error: errorMessage };
   }
 }
 

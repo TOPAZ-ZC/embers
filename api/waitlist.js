@@ -144,25 +144,22 @@ module.exports = async function handler(req, res) {
   const refCode = row.ref_code || null;
   const alreadyRegistered = !!row.already_registered;
 
-  // Fire-and-forget confirmation email for FIRST-TIME signups only.
-  // Non-blocking: email failure must not fail the signup. If RESEND_API_KEY
-  // is unset (local dev, or pre-domain-verification prod), sendConfirmationEmail
-  // returns ok:false silently — we just log and move on.
+  // On Vercel, background promises can be torn down once the response ends.
+  // Await the best-effort send so the fetch gets a real chance to complete,
+  // but never fail the signup if email fails or times out.
   if (!alreadyRegistered && refCode && RESEND_API_KEY) {
-    sendConfirmationEmail({
+    const emailResult = await sendConfirmationEmail({
       email,
       refCode,
       apiKey: RESEND_API_KEY,
       fromAddress: FROM_ADDRESS,
-    }).then((result) => {
-      if (!result.ok) {
-        console.error('[waitlist] email send failed', result.status, result.error);
-      } else {
-        console.log('[waitlist] email sent to', email, 'status', result.status);
-      }
-    }).catch((e) => {
-      console.error('[waitlist] email send threw', e && e.message);
     });
+
+    if (!emailResult.ok) {
+      console.error('[waitlist] email send failed', emailResult.status, emailResult.error);
+    } else {
+      console.log('[waitlist] email sent to', email, 'status', emailResult.status);
+    }
   }
 
   return json(res, 200, {
